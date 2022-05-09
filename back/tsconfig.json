@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "module": "commonjs",
+        "outDir": "dist",
+        "target": "es6",
+        "strict": true
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

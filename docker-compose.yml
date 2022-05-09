@@ -1,0 +1,65 @@
+version: "3.4"
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=jira_development
+    ports:
+      - 5432:5432
+    networks:
+      - shared-network
+    volumes:
+      - ./postgres-db:/var/lib/postgresql/data
+
+  nginx:
+    container_name: jira_nginx
+    image: jira-nginx-dev:1.0.0
+    depends_on:
+      - back
+      - front
+    restart: always
+    build:
+      context: nginx
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3050:80
+
+  back:
+    container_name: jira_back
+    restart: unless-stopped
+    image: jira-back-dev:1.0.0
+    build:
+      context: back
+      target: development
+      dockerfile: Dockerfile.dev
+    ports:
+      - 5000:5000
+    networks:
+      - shared-network
+    volumes:
+      - ./back/src:/app/back/src:ro
+    depends_on:
+      - postgres
+
+  front:
+    stdin_open: true
+    container_name: jira_front
+    restart: unless-stopped
+    image: jira-front-dev:1.0.0
+    build:
+      context: front
+      target: development
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    networks:
+      - shared-network
+    volumes:
+      - ./front/src:/app/front/src:ro
+    depends_on:
+      - back
+
+networks:
+  shared-network:
