@@ -14,7 +14,7 @@ function App() {
             <ul>
                 {
                     users.map((user: User) => {
-                        return <li key={user.id}>{user.username}</li>
+                        return <li key={user.id}>{user.firstname} "{user.username}" {user.lastname}</li>
                     })
                 }
             </ul>
