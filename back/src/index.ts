@@ -9,11 +9,23 @@ app.use(cors());
 app.options('*', cors());
 
 app.get("/users", (req: Request, res: Response) => {
-    var users: User[]= [
+    const users: User[]= [
         {id: 1, firstname: 'Tanguy', lastname: 'Kervran', username: 'utiiz'},
         {id: 2, firstname: 'Laura', lastname: 'Pagnucco', username: 'awa'},
         {id: 3, firstname: 'Adrien', lastname: 'Rioual', username: 'mavys'},
     ]
+    res.json(users)
+})
+
+app.get("/tasks", (req: Request, res: Response) => {
+    const data = {
+        tasks: {
+            'task-1': { id: 0, content: 'Take out the garbage' },
+            'task-2': { id: 1, content: 'Take out the garbage' },
+            'task-3': { id: 2, content: 'Take out the garbage' },
+            'task-4': { id: 3, content: 'Take out the garbage' },
+        }
+    }
     res.json(users)
 })
 
