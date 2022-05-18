@@ -9,3 +9,6 @@ up:
 
 down:
 	docker-compose down
+
+watch:
+	sudo docker-compose up --build

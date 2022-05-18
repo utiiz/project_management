@@ -10,8 +10,8 @@ services:
       - 5432:5432
     networks:
       - shared-network
-    volumes:
-      - ./postgres-db:/var/lib/postgresql/data
+    # volumes:
+    #   - ./postgres-db:/var/lib/postgresql/data
 
   nginx:
     container_name: jira_nginx
@@ -38,7 +38,7 @@ services:
       target: development
       dockerfile: Dockerfile.dev
     ports:
-      - 5000:5000
+      - 5050:5050
     networks:
       - shared-network
     volumes:
