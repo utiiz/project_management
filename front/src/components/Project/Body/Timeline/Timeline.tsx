@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend } from 'date-fns'
+import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend, format, isToday } from 'date-fns'
 import { isSameMonth } from 'date-fns/esm'
 
 const Container = styled.div`
@@ -11,21 +11,85 @@ const Container = styled.div`
     overflow-x: scroll;
 `
 
-const Month = styled.div`
+const Month = styled.div<{numberOfDay: number}>`
     display: flex;
-    flex: 0 0 calc(30 * 75px);
-    background-color: ${({theme}) => theme.colorBlue};
+    flex-direction: column;
+    flex: 0 0 calc(${props => props.numberOfDay} * 75px);
+    background-color: #F6F7F9;
+    border-right: 1px solid #E5EAEF;
+    box-sizing: content-box;
 `
 
-const Day = styled.div<{isWeekEnd: boolean}>`
-    flex: 0 0 75px;
+const MonthHeader = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    flex: 0 0 90px;
+    background-color: ${({theme}) => theme.primary};
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+`
+
+const MonthName = styled.div`
+    position: sticky;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    color: #676D7C;
+    font-weight: bold;
+    padding: 0 25px;
+`
+
+const Sticky = styled.div`
+    position: sticky;
+    left: 25px;
+`
+
+const MonthBody = styled.div`
+    display: flex;
+    flex: 1;
+`
+
+const DayHeader = styled.div<{isToday: boolean}>`
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex: 1 1 75px;
+    height: 40px;
+    color: ${props => props.isToday ? props.theme.colorBlue : '#676D7C'};
+    font-weight: bold;
+
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 8px;
+        border-right: 1px solid #E5EAEF;
+        margin-bottom: 4px;
+    }
+
+    &:last-child::after {
+        border: none;
+    }
+`
+
+const DayName = styled.span<{isToday: boolean}>`
+    color: ${props => props.isToday ? props.theme.colorBlue : '#A0A6B1'};
+    margin-right: 0.5rem;
+`
+
+const DayBody = styled.div<{isWeekEnd: boolean}>`
+    flex: 1 1 75px;
+    margin: 5px 0 0;
     background: ${props => props.isWeekEnd ? `repeating-linear-gradient(
-        -45deg,
+        -60deg,
         #E5EAEF,
-        #E5EAEF 1px,
-        #F3F4F7 1px,
-        #F3F4F7 13px
-    )` : '#F4F6F9'};
+        #E5EAEF 1.5px,
+        #F3F4F7 1.5px,
+        #F3F4F7 16.2px
+    )` : '#F6F7F9'};
     border-right: 1px solid #E5EAEF;
 `
 
@@ -60,14 +124,25 @@ const Body: FunctionComponent = () => {
         <Container>
             {
                 range.map(month => (
-                    <Month>
-                        {
-                            month.map(day => (
-                                <Day isWeekEnd={isWeekend(day)}>
-
-                                </Day>
-                            ))
-                        }
+                    <Month numberOfDay={month.length}>
+                        <MonthHeader>
+                            <MonthName><Sticky>{ format(month[0], 'MMM').toUpperCase() }</Sticky></MonthName>
+                            {
+                                month.map(day => (
+                                    <DayHeader isToday={isToday(day)}>
+                                        <DayName isToday={isToday(day)}>{ format(day, 'EEEEE') }</DayName>
+                                        { format(day, 'd') }
+                                    </DayHeader>
+                                ))
+                            }
+                        </MonthHeader>
+                        <MonthBody>
+                            {
+                                month.map(day => (
+                                    <DayBody isWeekEnd={isWeekend(day)} />
+                                ))
+                            }
+                        </MonthBody>
                     </Month>
                 ))
             }
