@@ -1,5 +1,7 @@
 import { FunctionComponent } from 'react'
+import Header from './Header/Header'
 import styled from 'styled-components'
+import Body from './Body/Body'
 
 export const Container = styled.div`
     flex: 1;
@@ -10,7 +12,8 @@ export const Container = styled.div`
 const Project: FunctionComponent = () => {
     return (
         <Container>
-            Project
+            <Header />
+            <Body />
         </Container>
     )
 }

@@ -1,12 +1,13 @@
 import { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import ImageTextItem from '../../ImageTextItem/ImageTextItem'
+import SearchBar from './SearchBar'
 
 const Container = styled.div`
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     padding: 0 20px;
-    width: 100%;
     height: 85px;
     border-bottom: 1px solid #e5eaef;
 `
@@ -38,12 +39,13 @@ const SecondaryText = styled.div`
     font-size: 12px;
 `
 
-const Menu: FunctionComponent = () => {
+const Header: FunctionComponent = () => {
     return (
         <Container>
-            <ImageTextItem primaryText='Horizon View' secondaryText='Product Company' hasCarret={true}/>
+            <SearchBar /> 
+            <ImageTextItem primaryText='Emmanuel Ikechukwu' secondaryText='emmanuel@gmail.com' roundedImage={true}/>
         </Container>
     )
 }
 
-export default Menu
+export default Header
