@@ -5,7 +5,6 @@ import Timeline from './Timeline/Timeline'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: ${({theme}) => theme.colorRed};
     align-items: center;
     justify-content: flex-end;
     max-width: calc(100vw - 300px);

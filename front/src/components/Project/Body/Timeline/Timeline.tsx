@@ -1,9 +1,10 @@
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend, format, isToday } from 'date-fns'
+import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend, format, isToday, getHours } from 'date-fns'
 import { isSameMonth } from 'date-fns/esm'
 
 const Container = styled.div`
+    position: relative;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -93,6 +94,29 @@ const DayBody = styled.div<{isWeekEnd: boolean}>`
     border-right: 1px solid #E5EAEF;
 `
 
+const NowLine = styled.div<{position: number}>`
+    z-index: 5;
+    position: absolute;
+    bottom: 0;
+    left: calc(${props => props.position} * 75px);
+    width: 2px;
+    height: calc(100% - 50px);
+    background-color: ${({theme}) => theme.colorBlue};
+
+    &:after {
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        content: '';
+        display : inline-block;
+        height : 0;
+        width : 0;
+        border-top : 10px solid ${({theme}) => theme.colorBlue};
+        border-right : 6px solid transparent;
+        border-left : 6px solid transparent;
+    }
+`
+
 function dateRange(startDate: Date, endDate: Date, steps = 1) {
     let range: Date[][] = []
     let currentDate = new Date(startDate)
@@ -116,12 +140,14 @@ const Body: FunctionComponent = () => {
         const monthBefore = startOfMonth(sub(now, {months: 1}))
         const monthAfter = endOfMonth(add(now, {months: 1}))
         let range: Date[][] = dateRange(monthBefore, monthAfter)
-        console.log(range)
         setRange(range)
+        console.log(range.flat().findIndex((date) => isSameDay(date, now)))
+        console.log(getHours(now) / 24)
     }, [])
 
     return (
         <Container>
+            <NowLine position={range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24}/>
             {
                 range.map(month => (
                     <Month numberOfDay={month.length}>
