@@ -15,7 +15,7 @@ const Container = styled.div`
 const Month = styled.div<{numberOfDay: number}>`
     display: flex;
     flex-direction: column;
-    flex: 0 0 calc(${props => props.numberOfDay} * 75px);
+    flex: 0 0 calc(${({numberOfDay}: {numberOfDay: number}) => numberOfDay} * 75px);
     background-color: #F6F7F9;
     border-right: 1px solid #E5EAEF;
     box-sizing: content-box;
@@ -26,7 +26,7 @@ const MonthHeader = styled.div`
     flex-wrap: wrap;
     align-items: flex-end;
     flex: 0 0 90px;
-    background-color: ${({theme}) => theme.primary};
+    background-color: ${({theme}: {theme: {primary: string}}) => theme.primary};
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
 `
 
@@ -57,7 +57,7 @@ const DayHeader = styled.div<{isToday: boolean}>`
     justify-content: center;
     flex: 1 1 75px;
     height: 40px;
-    color: ${props => props.isToday ? props.theme.colorBlue : '#676D7C'};
+    color: ${({isToday, theme}: {isToday: boolean, theme: {colorBlue: string}}) => isToday ? theme.colorBlue : '#676D7C'};
     font-weight: bold;
 
     &:after {
@@ -84,7 +84,7 @@ const DayName = styled.span<{isToday: boolean}>`
 const DayBody = styled.div<{isWeekEnd: boolean}>`
     flex: 1 1 75px;
     margin: 5px 0 0;
-    background: ${props => props.isWeekEnd ? `repeating-linear-gradient(
+    background: ${({isWeekEnd}: {isWeekEnd: boolean}) => isWeekEnd ? `repeating-linear-gradient(
         -60deg,
         #E5EAEF,
         #E5EAEF 1.5px,
@@ -147,7 +147,7 @@ const Body: FunctionComponent = () => {
         let range: Date[][] = dateRange(monthBefore, monthAfter)
         setRange(range)
         setNowLinePosition(range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24 + getMinutes(new Date()) / 1440)
-        
+
         const interval = setInterval(() => {
             setNowLinePosition(range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24 + getMinutes(new Date()) / 1440)
         }, 600000)

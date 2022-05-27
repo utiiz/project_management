@@ -1,5 +1,6 @@
 import { FunctionComponent } from 'react'
 import styled from 'styled-components'
+import Header from './Header/Header'
 import Timeline from './Timeline/Timeline'
 
 const Container = styled.div`
@@ -13,6 +14,7 @@ const Container = styled.div`
 const Body: FunctionComponent = () => {
     return (
         <Container>
+            <Header />
             <Timeline />
         </Container>
     )
