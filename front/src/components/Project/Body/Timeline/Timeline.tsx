@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend, format, isToday, getHours } from 'date-fns'
+import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend, format, isToday, getHours, getMinutes } from 'date-fns'
 import { isSameMonth } from 'date-fns/esm'
 
 const Container = styled.div`
@@ -77,7 +77,7 @@ const DayHeader = styled.div<{isToday: boolean}>`
 `
 
 const DayName = styled.span<{isToday: boolean}>`
-    color: ${props => props.isToday ? props.theme.colorBlue : '#A0A6B1'};
+    color: ${({isToday, theme}: {isToday: boolean, theme: {colorBlue: string}}) => isToday ? theme.colorBlue : '#A0A6B1'};
     margin-right: 0.5rem;
 `
 
@@ -92,16 +92,20 @@ const DayBody = styled.div<{isWeekEnd: boolean}>`
         #F3F4F7 16.2px
     )` : '#F6F7F9'};
     border-right: 1px solid #E5EAEF;
+
+    &:last-child {
+        border: none;
+    }
 `
 
 const NowLine = styled.div<{position: number}>`
     z-index: 5;
     position: absolute;
     bottom: 0;
-    left: calc(${props => props.position} * 75px);
+    left: calc(${({position}: {position: number}) => position} * 75px);
     width: 2px;
     height: calc(100% - 50px);
-    background-color: ${({theme}) => theme.colorBlue};
+    background-color: ${({theme}: {theme: {colorBlue: string}}) => theme.colorBlue};
 
     &:after {
         position: absolute;
@@ -111,7 +115,7 @@ const NowLine = styled.div<{position: number}>`
         display : inline-block;
         height : 0;
         width : 0;
-        border-top : 10px solid ${({theme}) => theme.colorBlue};
+        border-top : 10px solid ${({theme}: {theme: {colorBlue: string}}) => theme.colorBlue};
         border-right : 6px solid transparent;
         border-left : 6px solid transparent;
     }
@@ -134,6 +138,7 @@ function dateRange(startDate: Date, endDate: Date, steps = 1) {
 
 const Body: FunctionComponent = () => {
     const [range, setRange] = useState<Date[][]>([])
+    const [nowLinePosition, setNowLinePosition] = useState<number>(0)
 
     useEffect(() => {
         const now = new Date()
@@ -141,13 +146,17 @@ const Body: FunctionComponent = () => {
         const monthAfter = endOfMonth(add(now, {months: 1}))
         let range: Date[][] = dateRange(monthBefore, monthAfter)
         setRange(range)
-        console.log(range.flat().findIndex((date) => isSameDay(date, now)))
-        console.log(getHours(now) / 24)
+        setNowLinePosition(range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24 + getMinutes(new Date()) / 1440)
+        
+        const interval = setInterval(() => {
+            setNowLinePosition(range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24 + getMinutes(new Date()) / 1440)
+        }, 600000)
+        return () => clearInterval(interval)
     }, [])
 
     return (
         <Container>
-            <NowLine position={range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24}/>
+            <NowLine position={nowLinePosition}/>
             {
                 range.map(month => (
                     <Month numberOfDay={month.length}>

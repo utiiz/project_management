@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=jira_development
+      - POSTGRES_DB=project_management_development
     ports:
       - 5432:5432
     networks:
@@ -14,8 +14,8 @@ services:
     #   - ./postgres-db:/var/lib/postgresql/data
 
   nginx:
-    container_name: jira_nginx
-    image: jira-nginx-dev:1.0.0
+    container_name: project_management_nginx
+    image: project_management-nginx-dev:1.0.0
     restart: always
     build:
       context: nginx
@@ -30,9 +30,9 @@ services:
       - shared-network
 
   back:
-    container_name: jira_back
+    container_name: project_management_back
     restart: unless-stopped
-    image: jira-back-dev:1.0.0
+    image: project_management-back-dev:1.0.0
     build:
       context: back
       target: development
@@ -48,9 +48,9 @@ services:
 
   front:
     stdin_open: true
-    container_name: jira_front
+    container_name: project_management_front
     restart: unless-stopped
-    image: jira-front-dev:1.0.0
+    image: project_management-front-dev:1.0.0
     build:
       context: front
       target: development
