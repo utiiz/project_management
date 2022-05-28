@@ -142,8 +142,8 @@ const Body: FunctionComponent = () => {
 
     useEffect(() => {
         const now = new Date()
-        const monthBefore = startOfMonth(sub(now, {months: 1}))
-        const monthAfter = endOfMonth(add(now, {months: 1}))
+        const monthBefore = sub(now, {months: 1})
+        const monthAfter = add(now, {months: 1})
         let range: Date[][] = dateRange(monthBefore, monthAfter)
         setRange(range)
         setNowLinePosition(range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24 + getMinutes(new Date()) / 1440)
