@@ -9,7 +9,7 @@ const Container = styled.div`
     justify-content: flex-end;
     padding: 0 20px;
     height: 85px;
-    border-bottom: 1px solid #e5eaef;
+    border-bottom: 1px solid ${({theme}: {theme: {borderColor: string}}) => theme.borderColor};
 `
 
 const Logo = styled.div`

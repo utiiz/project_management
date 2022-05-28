@@ -8,7 +8,6 @@ const Container = styled.div`
     align-items: center;
     padding: 0 20px;
     height: 85px;
-    border-bottom: 1px solid #e5eaef;
 `
 const Bold = styled.div`
     color: ${({theme}) => theme.tertiaryTextColor};

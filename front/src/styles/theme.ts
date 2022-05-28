@@ -10,7 +10,6 @@ const globalTheme = {
     colorBlue: '#0560FD',
     colorRed: '#FA4F56',
     colorGreen: '#25C679',
-    colorGray: '#adadad',
 }
 
 
@@ -24,11 +23,14 @@ export const lightTheme = {
     headerNumber: '#FFF',
     activeMenu: '#585280',
     logoBackground: '#E6EFFF',
+    borderColor: '#E5EAEF',
+    colorGray: '#F6F7F9',
+    colorDarkGray: '#F3F4F7',
     ...globalTheme
 }
 
 export const darkTheme = {
-    primary: '#302C40',
+    primary: '#111315',
     secondary: '#2C2839',
     secondaryTextColor: '#676D7C',
     tertiaryTextColor: '#A0A6B1',
@@ -37,5 +39,8 @@ export const darkTheme = {
     headerNumber: '#585280',
     activeMenu: '#FFF',
     logoBackground: '#121A2C',
+    borderColor: '#252728',
+    colorGray: '#212325',
+    colorDarkGray: '#151718',
     ...globalTheme
 }
