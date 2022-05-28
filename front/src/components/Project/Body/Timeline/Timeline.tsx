@@ -16,8 +16,8 @@ const Month = styled.div<{numberOfDay: number}>`
     display: flex;
     flex-direction: column;
     flex: 0 0 calc(${({numberOfDay}: {numberOfDay: number}) => numberOfDay} * 75px);
-    background-color: #F6F7F9;
-    border-right: 1px solid #E5EAEF;
+    background-color: ${({theme}: {theme: {colorGray: string}}) => theme.colorGray};
+    border-right: 1px solid ${({theme}: {theme: {borderColor: string}}) => theme.borderColor};
     box-sizing: content-box;
 `
 
@@ -67,7 +67,7 @@ const DayHeader = styled.div<{isToday: boolean}>`
         left: 0;
         width: 100%;
         height: 8px;
-        border-right: 1px solid #E5EAEF;
+        border-right: 1px solid ${({theme}: {theme: {borderColor: string}}) => theme.borderColor};
         margin-bottom: 4px;
     }
 
@@ -84,15 +84,14 @@ const DayName = styled.span<{isToday: boolean}>`
 const DayBody = styled.div<{isWeekEnd: boolean}>`
     flex: 1 1 75px;
     margin: 5px 0 0;
-    background: ${({isWeekEnd}: {isWeekEnd: boolean}) => isWeekEnd ? `repeating-linear-gradient(
+    background: ${({isWeekEnd, theme}: {isWeekEnd: boolean, theme: {borderColor: string, colorGray: string, colorDarkGray: string}}) => isWeekEnd ? `repeating-linear-gradient(
         -60deg,
-        #E5EAEF,
-        #E5EAEF 1.5px,
-        #F3F4F7 1.5px,
-        #F3F4F7 16.2px
-    )` : '#F6F7F9'};
-    border-right: 1px solid #E5EAEF;
-
+        ${theme.borderColor},
+        ${theme.borderColor} 1.5px,
+        ${theme.colorDarkGray} 1.5px,
+        ${theme.colorDarkGray} 16.2px
+    )` : theme.colorGray};
+    border-right: 1px solid ${({theme}: {theme: {borderColor: string}}) => theme.borderColor};
     &:last-child {
         border: none;
     }
@@ -139,6 +138,7 @@ function dateRange(startDate: Date, endDate: Date, steps = 1) {
 const Body: FunctionComponent = () => {
     const [range, setRange] = useState<Date[][]>([])
     const [nowLinePosition, setNowLinePosition] = useState<number>(0)
+    const container = useRef()
 
     useEffect(() => {
         const now = new Date()
@@ -147,15 +147,20 @@ const Body: FunctionComponent = () => {
         let range: Date[][] = dateRange(monthBefore, monthAfter)
         setRange(range)
         setNowLinePosition(range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24 + getMinutes(new Date()) / 1440)
+        container.current.scrollLeft = 75 * nowLinePosition - container.current.offsetWidth / 2
 
         const interval = setInterval(() => {
             setNowLinePosition(range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24 + getMinutes(new Date()) / 1440)
         }, 600000)
         return () => clearInterval(interval)
-    }, [])
+    }, [nowLinePosition])
+
+    const onScroll = (event) => {
+        container.current.scrollLeft += event.deltaY;
+    }
 
     return (
-        <Container>
+        <Container onWheel={onScroll} ref={container}>
             <NowLine position={nowLinePosition}/>
             {
                 range.map(month => (

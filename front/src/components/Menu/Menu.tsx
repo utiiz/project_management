@@ -7,7 +7,7 @@ export const Container = styled.div`
     width: 300px;
     height: 100vh;
     background: ${({theme}) => theme.primary};
-    border-right: 1px solid #e5eaef;
+    border-right: 1px solid ${({theme}: {theme: {borderColor: string}}) => theme.borderColor};
 `
 
 const Menu: FunctionComponent = () => {

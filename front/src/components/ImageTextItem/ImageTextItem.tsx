@@ -6,7 +6,6 @@ const Container = styled.div<Pick<Props, 'hasCarret'>>`
     flex: ${props => props.hasCarret ? '0 0 100%' : '0 0 225px'};
     align-items: center;
     height: 85px;
-    border-bottom: 1px solid #e5eaef;
 `
 
 const Logo = styled.div<Pick<Props, 'roundedImage'>>`

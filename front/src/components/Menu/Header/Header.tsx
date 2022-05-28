@@ -8,7 +8,7 @@ const Container = styled.div`
     padding: 0 20px;
     width: 100%;
     height: 85px;
-    border-bottom: 1px solid #e5eaef;
+    border-bottom: 1px solid ${({theme}: {theme: {borderColor: string}}) => theme.borderColor};
 `
 
 const Menu: FunctionComponent = () => {
