@@ -1,4 +1,5 @@
 import { FunctionComponent } from 'react'
+import { MdOutlineKeyboard, MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import styled from 'styled-components'
 
 const Container = styled.div<Pick<Props, 'hasCarret'>>`
@@ -35,6 +36,14 @@ const SecondaryText = styled.div`
     font-size: 12px;
 `
 
+const Icon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: ${({theme}) => theme.tertiaryTextColor};
+`
+
 interface Props {
     roundedImage?: boolean
     hasCarret?: boolean
@@ -50,7 +59,7 @@ const ImageTextItem: FunctionComponent<Props> = (props) => {
                 <Bold>{props.primaryText}</Bold>
                 <SecondaryText>{props.secondaryText}</SecondaryText> 
             </Column>
-            {props.hasCarret && <div>v</div>}
+            {props.hasCarret && <Icon><MdOutlineKeyboardArrowDown/></Icon>}
         </Container>
     )
 }
