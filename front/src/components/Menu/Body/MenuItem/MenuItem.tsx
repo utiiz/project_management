@@ -35,7 +35,7 @@ const Count = styled.div<{isImportant?: boolean}>`
     height: 30px;
     font-size: 0.85rem;
     border-radius: 7.5px;
-    color: ${({theme}) => theme.primary};
+    color: ${({theme}) => theme.colorWhite};
     background-color: ${({theme, isImportant}) => isImportant ? theme.colorRed : theme.colorBlue};
 `
 
