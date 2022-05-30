@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react'
-import { MdOutlineKeyboard, MdOutlineKeyboardArrowDown } from 'react-icons/md'
+import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import styled from 'styled-components'
 
 const Container = styled.div<Pick<Props, 'hasCarret'>>`

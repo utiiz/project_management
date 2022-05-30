@@ -2,6 +2,7 @@ import { FunctionComponent } from 'react'
 import Header from './Header/Header'
 import styled from 'styled-components'
 import Body from './Body/Body'
+import Stats from './Stats/Stats'
 
 export const Container = styled.div`
     flex: 1;
@@ -9,11 +10,18 @@ export const Container = styled.div`
     background: ${({theme}) => theme.primary};
 `
 
+const Main = styled.div`
+    position: relative;
+`
+
 const Project: FunctionComponent = () => {
     return (
         <Container>
             <Header />
-            <Body />
+            <Main>
+                <Body />
+                <Stats />
+            </Main>
         </Container>
     )
 }

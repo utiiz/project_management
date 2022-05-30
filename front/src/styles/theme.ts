@@ -26,6 +26,7 @@ export const lightTheme = {
     borderColor: '#E5EAEF',
     colorGray: '#F6F7F9',
     colorDarkGray: '#F3F4F7',
+    colorDarkerGray: '#FFF',
     ...globalTheme
 }
 
@@ -42,5 +43,6 @@ export const darkTheme = {
     borderColor: '#252728',
     colorGray: '#212325',
     colorDarkGray: '#151718',
+    colorDarkerGray: '#1E2021',
     ...globalTheme
 }

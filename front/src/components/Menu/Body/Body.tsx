@@ -33,7 +33,7 @@ const Body: FunctionComponent = () => {
             <MenuItem icon={<MdOutlineFolderOpen />} title="Projects" isActive/>
             <MenuItem icon={<BiMessageSquare />} title="Messages" count={3}/>
             <MenuItem icon={<BsPeople />} title="Team Members"/>
-            <MenuItem icon={<BsCalendar />} title="Calendar"/>
+            <MenuItem icon={<BiHomeAlt />} title="Calendar"/>
             <MenuItem title="Recent Projects" isHeader/>
             <MenuItem icon={<FiBox />} title="Way Finder"/>
             <MenuItem icon={<FiBox />} title="Internal Project"/>
