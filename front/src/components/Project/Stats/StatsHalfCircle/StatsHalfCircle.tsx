@@ -1,5 +1,4 @@
 import { FunctionComponent } from 'react'
-import { MdOutlineKeyboardArrowRight, MdInfoOutline } from 'react-icons/md'
 import styled from 'styled-components'
 import DashedCircle from './DashedCircle/DashedCircle'
 
@@ -7,7 +6,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 350px;
 `
 
 const StatsCircle = styled.div`

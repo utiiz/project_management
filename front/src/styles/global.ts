@@ -15,6 +15,7 @@ export const GlobalStyles = createGlobalStyle`
         padding: 0;
         font-family: 'PT Sans', 'Roboto', sans-serif;
         transition: all 0.2s linear;
+        overflow: hidden;
     }
 
     /* total width */

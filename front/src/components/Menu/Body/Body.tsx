@@ -14,6 +14,8 @@ export const Container = styled.div`
     width: 300px;
     border-right: 1px solid ${({theme}: {theme: {borderColor: string}}) => theme.borderColor};
     padding: 27.5px;
+    overflow-y: overlay;
+    overflow-x: hidden;
 `
 
 const Divider = styled.div`

@@ -6,7 +6,7 @@ import '@fontsource/roboto'
 
 const App = () => {
     return (
-        <ThemeProvider theme={lightTheme}>
+        <ThemeProvider theme={darkTheme}>
             <GlobalStyles />
             <ProjectContainer />
         </ThemeProvider>

@@ -15,6 +15,10 @@ const Logo = styled.div<Pick<Props, 'roundedImage'>>`
     margin-right: 15px;
     background-color: ${({theme}) => theme.logoBackground};
     border-radius: ${props => props.roundedImage ? '50px' : '10px'};
+    
+    background-image: ${props => props.roundedImage ? 'url(\'https://img.freepik.com/free-vector/people-avatar-bundle-set-user-portraits-circles-different-human-face-icons-male-female_212216-492.jpg?w=900\')' : 'none'};
+    background-size: 300px 150px;
+    background-position: 117px 210px;
 `
 
 const Column = styled.div`

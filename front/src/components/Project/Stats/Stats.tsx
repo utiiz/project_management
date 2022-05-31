@@ -1,6 +1,7 @@
 import { FunctionComponent } from 'react'
 import { MdOutlineKeyboardArrowRight, MdInfoOutline } from 'react-icons/md'
 import styled from 'styled-components'
+import RecentActivities from './RecentActivities/RecentActivities'
 import DashedCircle from './StatsHalfCircle/DashedCircle/DashedCircle'
 import StatsHalfCircle from './StatsHalfCircle/StatsHalfCircle'
 
@@ -131,6 +132,7 @@ const Stats: FunctionComponent = () => {
                     <InfoText>You completed <ColoredText>3% more</ColoredText> tasks this week than last week</InfoText>
                 </InfoStats>
             </StatsContainer>
+            <RecentActivities />
         </Container>
     )
 }
