@@ -22,7 +22,6 @@ const Image = styled.div`
     width: 35px;
     height: 35px;
     border-radius: 35px;
-    background-color: red;
     background-image: url('https://img.freepik.com/free-vector/people-avatar-bundle-set-user-portraits-circles-different-human-face-icons-male-female_212216-492.jpg?w=900');
     background-position: 130.25px 97px;
     background-size: 225px 108.25px;

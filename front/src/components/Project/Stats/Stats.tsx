@@ -1,21 +1,23 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { MdOutlineKeyboardArrowRight, MdInfoOutline } from 'react-icons/md'
 import styled from 'styled-components'
+import Icon from './Icon/Icon'
 import RecentActivities from './RecentActivities/RecentActivities'
 import DashedCircle from './StatsHalfCircle/DashedCircle/DashedCircle'
 import StatsHalfCircle from './StatsHalfCircle/StatsHalfCircle'
 
-const Container = styled.div`
+const Container = styled.div<{isOpen: boolean}>`
     z-index: 10;
     position: absolute;
     top: 0;
-    right: 0;
+    right: ${({isOpen}) => isOpen ? '0' : '-350px'};
     display: flex;
     flex-direction: column;
     width: 350px;
     height: calc(100vh - 85px);
     background: ${({theme}) => theme.primary};
     border-left: 1px solid ${({theme}) => theme.borderColor};
+    transition: all 0.2s linear;
 `
 
 const StatsContainer = styled.div`
@@ -27,10 +29,10 @@ const StatsContainer = styled.div`
     border-bottom: 1px solid ${({theme}) => theme.borderColor};
 `
 
-const Handle = styled.div`
+const Handle = styled.div<{isOpen: boolean}>`
     position: absolute;
     top: 37.5px;
-    left: -17.5px;
+    left: ${({isOpen}) => isOpen ? '-17.5px' : '-47.5px'};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,6 +43,8 @@ const Handle = styled.div`
     border: 1px solid ${({theme}) => theme.borderColor};
     font-size: 20px;
     color: ${({theme}) => theme.tertiaryTextColor};
+    transform: rotate(${({isOpen}) => isOpen ? '0' : '180deg'});
+    transition: all 0.2s linear;
 `
 
 const Header = styled.div`
@@ -112,17 +116,21 @@ const IconInfo = styled.div`
 `
 
 const Stats: FunctionComponent = () => {
+    const [open, setOpen] = useState<boolean>(true)
+    const onClick = () => {
+        setOpen(!open)
+    }
     return (
-        <Container>
-            <Handle>
+        <Container isOpen={open}>
+            <Handle onClick={onClick} isOpen={open}>
                 <MdOutlineKeyboardArrowRight />
             </Handle>
             <StatsContainer>
                 <Header>
                     <Title>Project Stats</Title>
-                    icon
+                    <Icon />
                 </Header>
-                <StatsHalfCircle percent={72}/>
+                <StatsHalfCircle percent={43.5}/>
                 <StatusContainer>
                     <Status isCompleted>Completed<StatusNumber>118</StatusNumber></Status>
                     <Status>In Progress<StatusNumber>47</StatusNumber></Status>

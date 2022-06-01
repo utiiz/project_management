@@ -29,6 +29,7 @@ const Circle = styled.div<{percent: number}>`
     border: 30px solid ${({theme}) => theme.colorRed};
     border-bottom-color: ${({theme}) => theme.colorGreen};
     border-right-color: ${({theme}) => theme.colorGreen};
+    transition: all 0.2s linear;
 `
 
 const SeparatorCircle = styled.div<{percent: number}>`
@@ -41,6 +42,7 @@ const SeparatorCircle = styled.div<{percent: number}>`
     background: ${({theme}) => theme.primary};
     transform-origin: left center;
     transform: rotate(${({percent}) => `${180 - percent * -1.8}deg`});
+    transition: all 0.2s linear;
 `
 
 const HalfCircle = styled.div`
@@ -74,6 +76,7 @@ const Arrow = styled.div<{percent: number}>`
     background: ${({theme}) => theme.secondaryTextColor};
     transform-origin: left center;
     transform: translateZ(-10px) rotate(${({percent}) => `${180 - percent * -1.8}deg`});
+    transition: all 0.2s linear;
 
     &:after {
         content: '';

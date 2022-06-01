@@ -1,6 +1,7 @@
 import { sub } from 'date-fns'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+import Icon from '../Icon/Icon'
 import Activity from './Activity'
 
 const Container = styled.div`
@@ -73,7 +74,7 @@ const RecentActivities: FunctionComponent<Props> = () => {
         <Container>
             <Header>
                 <Title>Recent Activities</Title>
-                icon
+            <Icon />
             </Header>
             {
                 activities.map(activity => (
