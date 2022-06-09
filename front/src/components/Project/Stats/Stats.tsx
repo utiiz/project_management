@@ -116,7 +116,7 @@ const IconInfo = styled.div`
 `
 
 const Stats: FunctionComponent = () => {
-    const [open, setOpen] = useState<boolean>(true)
+    const [open, setOpen] = useState<boolean>(false)
     const onClick = () => {
         setOpen(!open)
     }

@@ -2,13 +2,14 @@ import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend, format, isToday, getHours, getMinutes } from 'date-fns'
 import { isSameMonth } from 'date-fns/esm'
+import { Issue } from '../../../../types/Issue'
 
 const Container = styled.div`
     position: relative;
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 500px;
+    height: 750px;
     overflow-x: scroll;
 `
 
@@ -120,6 +121,17 @@ const NowLine = styled.div<{position: number}>`
     }
 `
 
+const IssueContainer = styled.div<{start: number, end: number, topPosition: number}>`
+    position: absolute;
+    top: 90px;
+    top: calc(${({topPosition}: {topPosition: number}) => topPosition} * 75px + 90px);
+    left: calc(${({start}: {start: number}) => start} * 75px);
+    display: flex;
+    background-color: white;
+    width: calc(${({start, end}: {start: number, end: number}) => end - start} * 75px);
+    height: 45px;
+`
+
 function dateRange(startDate: Date, endDate: Date, steps = 1) {
     let range: Date[][] = []
     let currentDate = new Date(startDate)
@@ -135,8 +147,9 @@ function dateRange(startDate: Date, endDate: Date, steps = 1) {
     return range
 }
 
-const Body: FunctionComponent = () => {
+const Timeline: FunctionComponent = () => {
     const [range, setRange] = useState<Date[][]>([])
+    const [issues, setIssues] = useState<Issue[]>([])
     const [nowLinePosition, setNowLinePosition] = useState<number>(0)
     const container = useRef()
 
@@ -152,6 +165,70 @@ const Body: FunctionComponent = () => {
         const interval = setInterval(() => {
             setNowLinePosition(range.flat().findIndex((date) => isSameDay(date, new Date())) + getHours(new Date()) / 24 + getMinutes(new Date()) / 1440)
         }, 600000)
+
+        const issuesArray: Issue[] = [
+            {
+                id: 1,
+                title: 'Test issue',
+                created_at: sub(new Date(), {days: 1}),
+                expected_at: add(new Date(), {days: 2}),
+                start: range.flat().findIndex(date => isSameDay(date, sub(new Date(), {days: 1}))),
+                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 2}))),
+                topPosition: 0, // 0
+            },
+            {
+                id: 2,
+                title: 'Test issue',
+                created_at: sub(new Date(), {days: 2}),
+                expected_at: add(new Date(), {days: 5}),
+                start: range.flat().findIndex(date => isSameDay(date, sub(new Date(), {days: 2}))),
+                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
+                topPosition: 0, // 1
+            },
+            {
+                id: 3,
+                title: 'Test issue',
+                created_at: add(new Date(), {days: 3}),
+                expected_at: add(new Date(), {days: 5}),
+                start: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 3}))),
+                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
+                topPosition: 0, // 0
+            },
+            {
+                id: 4,
+                title: 'Test issue',
+                created_at: add(new Date(), {days: 3}),
+                expected_at: add(new Date(), {days: 5}),
+                start: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 3}))),
+                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
+                topPosition: 0, // 2
+            },
+            {
+                id: 5,
+                title: 'Test issue',
+                created_at: sub(new Date(), {days: 2}),
+                expected_at: add(new Date(), {days: 5}),
+                start: range.flat().findIndex(date => isSameDay(date, sub(new Date(), {days: 2}))),
+                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
+                topPosition: 0, // 3
+            },
+        ]
+        
+        issuesArray.map((issue, index) => {
+            if (!index) {
+                return
+            }
+            var issueRange = dateRange(issue.created_at, issue.expected_at).flat()
+            issuesArray.slice(0, index).map((issue2, index2) => {
+                var issue2Range = dateRange(issue2.created_at, issue2.expected_at).flat()
+                if (issue2Range.some(date2 => issueRange.some(date => isSameDay(date, date2)))) {
+                    issue.topPosition += 1
+                }
+            })
+        })
+
+        setIssues(issuesArray)
+
         return () => clearInterval(interval)
     }, [nowLinePosition])
 
@@ -186,8 +263,13 @@ const Body: FunctionComponent = () => {
                     </Month>
                 ))
             }
+            {
+                issues.map(issue => (
+                    <IssueContainer start={issue.start} end={issue.end} topPosition={issue.topPosition}>{ issue.title }</IssueContainer>
+                ))
+            }
         </Container>
     )
 }
 
-export default Body
+export default Timeline
