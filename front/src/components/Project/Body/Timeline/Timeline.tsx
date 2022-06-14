@@ -123,12 +123,11 @@ const NowLine = styled.div<{position: number}>`
 
 const IssueContainer = styled.div<{start: number, end: number, topPosition: number}>`
     position: absolute;
-    top: 90px;
-    top: calc(${({topPosition}: {topPosition: number}) => topPosition} * 75px + 90px);
-    left: calc(${({start}: {start: number}) => start} * 75px);
+    top: calc(${({topPosition}: {topPosition: number}) => topPosition} * 50px + 95px);
+    left: calc(${({start}: {start: number}) => start} * 75px + 5px);
     display: flex;
     background-color: white;
-    width: calc(${({start, end}: {start: number, end: number}) => end - start} * 75px);
+    width: calc(${({start, end}: {start: number, end: number}) => end - start} * 75px - 5px);
     height: 45px;
 `
 
@@ -150,6 +149,7 @@ function dateRange(startDate: Date, endDate: Date, steps = 1) {
 const Timeline: FunctionComponent = () => {
     const [range, setRange] = useState<Date[][]>([])
     const [issues, setIssues] = useState<Issue[]>([])
+    const [positions, setPositions] = useState<number[][]>([])
     const [nowLinePosition, setNowLinePosition] = useState<number>(0)
     const container = useRef()
 
@@ -191,7 +191,7 @@ const Timeline: FunctionComponent = () => {
                 created_at: add(new Date(), {days: 3}),
                 expected_at: add(new Date(), {days: 5}),
                 start: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 3}))),
-                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
+                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 6}))),
                 topPosition: 0, // 0
             },
             {
@@ -206,28 +206,52 @@ const Timeline: FunctionComponent = () => {
             {
                 id: 5,
                 title: 'Test issue',
-                created_at: sub(new Date(), {days: 2}),
-                expected_at: add(new Date(), {days: 5}),
-                start: range.flat().findIndex(date => isSameDay(date, sub(new Date(), {days: 2}))),
-                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
+                created_at: add(new Date(), {days: 5}),
+                expected_at: add(new Date(), {days: 7}),
+                start: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
+                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 7}))),
                 topPosition: 0, // 3
             },
         ]
         
+        // issuesArray.map((issue, index) => {
+        //     if (!index) {
+        //         return
+        //     }
+        //     const issueRange = dateRange(issue.created_at, issue.expected_at).flat()
+        //     issuesArray.slice(0, index).reverse().map((issue2, index2, arr) => {
+        //         issue.topPosition = arr.length
+        //         const issue2Range = dateRange(issue2.created_at, issue2.expected_at).flat()
+        //         if (!issue2Range.some(date2 => issueRange.some(date => isSameDay(date, date2)))) {
+        //             issue.topPosition -= 1
+        //         }
+        //     })
+        // })
+
+        let arrDate: Date[][] = []
+        let arrPosition: number[][] = []
+        arrDate[0] = []
+        arrPosition[0] = []
         issuesArray.map((issue, index) => {
-            if (!index) {
-                return
-            }
-            var issueRange = dateRange(issue.created_at, issue.expected_at).flat()
-            issuesArray.slice(0, index).map((issue2, index2) => {
-                var issue2Range = dateRange(issue2.created_at, issue2.expected_at).flat()
-                if (issue2Range.some(date2 => issueRange.some(date => isSameDay(date, date2)))) {
-                    issue.topPosition += 1
+            const issueRange = dateRange(issue.created_at, issue.expected_at).flat()
+            for (let i = 0; i < arrDate.length; i++) {
+                if (!arrDate[i].some(dateArr => issueRange.some(date => isSameDay(date, dateArr)))) {
+                    arrDate[i] = [...arrDate[i], ...issueRange]
+                    arrPosition[i] = [...arrPosition[i], index]
+                    break
+                } else {
+                    if (!arrDate[i + 1]) {
+                        arrDate[i + 1] = []
+                        arrPosition[i + 1] = []
+                    }
                 }
-            })
+            }
         })
+        console.log(arrDate)
+        console.log(arrPosition)
 
         setIssues(issuesArray)
+        setPositions(arrPosition)
 
         return () => clearInterval(interval)
     }, [nowLinePosition])
@@ -264,8 +288,13 @@ const Timeline: FunctionComponent = () => {
                 ))
             }
             {
-                issues.map(issue => (
-                    <IssueContainer start={issue.start} end={issue.end} topPosition={issue.topPosition}>{ issue.title }</IssueContainer>
+                // issues.map(issue => (
+                //     <IssueContainer start={issue.start} end={issue.end} topPosition={issue.topPosition}>{ issue.title }</IssueContainer>
+                // ))
+                positions.map((pos, index) => (
+                    pos.map(p => (
+                        <IssueContainer start={issues[p].start} end={issues[p].end} topPosition={index}>{ issues[p].title }</IssueContainer>
+                    ))
                 ))
             }
         </Container>
