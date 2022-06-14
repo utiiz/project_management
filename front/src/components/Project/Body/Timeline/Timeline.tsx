@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend, format, isToday, getHours, getMinutes } from 'date-fns'
+import { add, sub, startOfMonth, endOfMonth, isBefore, isSameDay, isWeekend, format, isToday, getHours, getMinutes, endOfDay, startOfDay } from 'date-fns'
 import { isSameMonth } from 'date-fns/esm'
 import { Issue } from '../../../../types/Issue'
 
@@ -129,6 +129,7 @@ const IssueContainer = styled.div<{start: number, end: number, topPosition: numb
     background-color: white;
     width: calc(${({start, end}: {start: number, end: number}) => end - start} * 75px - 5px);
     height: 45px;
+    color: black;
 `
 
 function dateRange(startDate: Date, endDate: Date, steps = 1) {
@@ -172,72 +173,51 @@ const Timeline: FunctionComponent = () => {
                 title: 'Test issue',
                 created_at: sub(new Date(), {days: 1}),
                 expected_at: add(new Date(), {days: 2}),
-                start: range.flat().findIndex(date => isSameDay(date, sub(new Date(), {days: 1}))),
-                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 2}))),
-                topPosition: 0, // 0
             },
             {
                 id: 2,
                 title: 'Test issue',
                 created_at: sub(new Date(), {days: 2}),
                 expected_at: add(new Date(), {days: 5}),
-                start: range.flat().findIndex(date => isSameDay(date, sub(new Date(), {days: 2}))),
-                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
-                topPosition: 0, // 1
             },
             {
                 id: 3,
                 title: 'Test issue',
-                created_at: add(new Date(), {days: 3}),
-                expected_at: add(new Date(), {days: 5}),
-                start: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 3}))),
-                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 6}))),
-                topPosition: 0, // 0
+                created_at: add(new Date(), {days: 2}),
+                expected_at: add(new Date(), {days: 6}),
             },
             {
                 id: 4,
                 title: 'Test issue',
-                created_at: add(new Date(), {days: 3}),
+                created_at: add(new Date(), {days: 2}),
                 expected_at: add(new Date(), {days: 5}),
-                start: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 3}))),
-                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
-                topPosition: 0, // 2
             },
             {
                 id: 5,
                 title: 'Test issue',
                 created_at: add(new Date(), {days: 5}),
                 expected_at: add(new Date(), {days: 7}),
-                start: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 5}))),
-                end: range.flat().findIndex(date => isSameDay(date, add(new Date(), {days: 7}))),
-                topPosition: 0, // 3
             },
         ]
-        
-        // issuesArray.map((issue, index) => {
-        //     if (!index) {
-        //         return
-        //     }
-        //     const issueRange = dateRange(issue.created_at, issue.expected_at).flat()
-        //     issuesArray.slice(0, index).reverse().map((issue2, index2, arr) => {
-        //         issue.topPosition = arr.length
-        //         const issue2Range = dateRange(issue2.created_at, issue2.expected_at).flat()
-        //         if (!issue2Range.some(date2 => issueRange.some(date => isSameDay(date, date2)))) {
-        //             issue.topPosition -= 1
-        //         }
-        //     })
-        // })
 
         let arrDate: Date[][] = []
         let arrPosition: number[][] = []
         arrDate[0] = []
         arrPosition[0] = []
         issuesArray.map((issue, index) => {
-            const issueRange = dateRange(issue.created_at, issue.expected_at).flat()
+            const start = startOfDay(issue.created_at)
+            const end   = startOfDay(issue.expected_at)
             for (let i = 0; i < arrDate.length; i++) {
-                if (!arrDate[i].some(dateArr => issueRange.some(date => isSameDay(date, dateArr)))) {
-                    arrDate[i] = [...arrDate[i], ...issueRange]
+                if (!arrDate[i].length) {
+                    arrDate[i] = [start, end]
                     arrPosition[i] = [...arrPosition[i], index]
+                    break
+                }
+                const j = arrDate[i].length - 1
+                if (!arrDate[i][j] || start >= arrDate[i][j]) {
+                    arrDate[i] = [...arrDate[i], start, end]
+                    arrPosition[i] = [...arrPosition[i], index]
+                    console.log(index)
                     break
                 } else {
                     if (!arrDate[i + 1]) {
@@ -246,7 +226,10 @@ const Timeline: FunctionComponent = () => {
                     }
                 }
             }
+                        
+            
         })
+
         console.log(arrDate)
         console.log(arrPosition)
 
@@ -288,13 +271,12 @@ const Timeline: FunctionComponent = () => {
                 ))
             }
             {
-                // issues.map(issue => (
-                //     <IssueContainer start={issue.start} end={issue.end} topPosition={issue.topPosition}>{ issue.title }</IssueContainer>
-                // ))
                 positions.map((pos, index) => (
-                    pos.map(p => (
-                        <IssueContainer start={issues[p].start} end={issues[p].end} topPosition={index}>{ issues[p].title }</IssueContainer>
-                    ))
+                    pos.map(p => {
+                        const start = range.flat().findIndex(date => isSameDay(date, issues[p].created_at))
+                        const end   = range.flat().findIndex(date => isSameDay(date, issues[p].expected_at))
+                        return <IssueContainer start={start} end={end} topPosition={index}>{ issues[p].id }</IssueContainer>
+                    })
                 ))
             }
         </Container>
