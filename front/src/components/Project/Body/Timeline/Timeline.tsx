@@ -183,8 +183,8 @@ const Timeline: FunctionComponent = () => {
             {
                 id: 3,
                 title: 'Test issue',
-                created_at: add(new Date(), {days: 2}),
-                expected_at: add(new Date(), {days: 6}),
+                created_at: add(new Date(), {days: 5}),
+                expected_at: add(new Date(), {days: 7}),
             },
             {
                 id: 4,
@@ -214,12 +214,25 @@ const Timeline: FunctionComponent = () => {
                     break
                 }
                 const j = arrDate[i].length - 1
-                if (!arrDate[i][j] || start >= arrDate[i][j]) {
+                if (start >= arrDate[i][j]) {
                     arrDate[i] = [...arrDate[i], start, end]
                     arrPosition[i] = [...arrPosition[i], index]
-                    console.log(index)
                     break
                 } else {
+                    let shouldBreak = false
+                    for (let k = j - 1; k >= 0; k-=2) {
+                        if (start >= arrDate[i][k - 1] && end <= arrDate[i][k]) {
+                            arrDate[i].splice(k, 0, start, end)
+                            arrPosition[i].splice(k, 0, index)
+                            console.log(arrDate[i])
+                            console.log(index)
+                            shouldBreak = true
+                            break
+                        }
+                    }
+                    if (shouldBreak) {
+                        break
+                    }
                     if (!arrDate[i + 1]) {
                         arrDate[i + 1] = []
                         arrPosition[i + 1] = []
